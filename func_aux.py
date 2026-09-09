@@ -1,8 +1,12 @@
+import select
+import subprocess
 import sys
-import msvcrt
+import time
+
+from constants import *
 
 if sys.platform == "win32":
-
+    import msvcrt
     ES_WINDOWS = True
 else:
     ES_WINDOWS = False
