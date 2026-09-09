@@ -80,7 +80,7 @@ FRUTAS          = {
 # │ FUNCIÓN:     limpiar_buffer()                            │
 # │ DESCRIPCIÓN: Vacía la entrada estándar de teclado        │
 # └──────────────────────────────────────────────────────────┘
-def limpiar_buffer():
+def limpiar_buffer():   ##UTIL.py para archivos de utilidad
     try:
         while msvcrt.kbhit():
             msvcrt.getch()
