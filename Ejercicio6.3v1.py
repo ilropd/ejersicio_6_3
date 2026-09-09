@@ -1,26 +1,33 @@
-import platform, re, subprocess, sys, time, msvcrt, select
+import platform, subprocess, sys, time, select
 from reportlab.pdfgen import canvas
 from datetime import datetime
+
+if sys.platform == "win32":
+    import msvcrt
+    ES_WINDOWS = True
+else:
+    ES_WINDOWS = False
+
 
 # ==========================================
 # 1. CONFIGURACIÓN Y CONSTANTES DEL SISTEMA
 # ==========================================
 
-ES_WINDOWS      = platform.system() == "Windows"
+ES_WINDOWS = platform.system() == "Windows"
 COMANDO_LIMPIAR = ["cls"] if ES_WINDOWS else ["clear"]
 
-BOLD            = "\033[1m"
-ROJO            = "\033[31;1m"
-VERDE           = "\033[32m"
-NARANJA         = "\033[38;5;208m"
-AMARILLO        = "\033[93m"
-CYAN            = "\033[96m"
-RESET           = "\033[0m"
+BOLD = "\033[1m"
+ROJO = "\033[31;1m"
+VERDE = "\033[32m"
+NARANJA = "\033[38;5;208m"
+AMARILLO = "\033[93m"
+CYAN = "\033[96m"
+RESET = "\033[0m"
 
-SUBIR           = "\033[1A" 
-BORRAR          = "\033[2K" 
+SUBIR = "\033[1A"
+BORRAR = "\033[2K"
 
-TIPO_IVA        = 0.04
+TIPO_IVA = 0.04
 
 BANDERAS = {
     "error": "❌",
@@ -30,7 +37,7 @@ BANDERAS = {
     "pregunta": "❓",
 }
 
-CABECERA        = (
+CABECERA = (
     "================================================================================================\n"
     f"                                 🛒 {BOLD}FRUTERÍA - PUNTO DE VENTA{RESET}                     \n"
     f"  Selecciona fruta, ajusta peso (+/-/*), cobra en efectivo o tarjeta y genera e imprime ticket      \n"
@@ -49,22 +56,22 @@ CABECERA        = (
     "================================================================================================\n"
 )
 
-FRUTAS          = {
-    "cereza":    ("🍒", "Cereza",    4.50),
-    "datil":     ("🌴", "Dátil",     6.20),
-    "fresa":     ("🍓", "Fresa",     3.80),
-    "kiwi":      ("🥝", "Kiwi",      3.20),
-    "limon":     ("🍋", "Limón",     1.60),
-    "mango":     ("🥭", "Mango",     3.50),
-    "manzana":   ("🍎", "Manzana",   1.95),
+FRUTAS = {
+    "cereza": ("🍒", "Cereza", 4.50),
+    "datil": ("🌴", "Dátil", 6.20),
+    "fresa": ("🍓", "Fresa", 3.80),
+    "kiwi": ("🥝", "Kiwi", 3.20),
+    "limon": ("🍋", "Limón", 1.60),
+    "mango": ("🥭", "Mango", 3.50),
+    "manzana": ("🍎", "Manzana", 1.95),
     "melocoton": ("🍑", "Melocotón", 2.40),
-    "melon":     ("🍈", "Melón",     1.20),
-    "naranja":   ("🍊", "Naranja",   1.50),
-    "pera":      ("🍐", "Pera",      2.15),
-    "pina":      ("🍍", "Piña",      1.80),
-    "platano":   ("🍌", "Plátano",   2.10),
-    "sandia":    ("🍉", "Sandía",    0.95),
-    "uva":       ("🍇", "Uva",       2.90)
+    "melon": ("🍈", "Melón", 1.20),
+    "naranja": ("🍊", "Naranja", 1.50),
+    "pera": ("🍐", "Pera", 2.15),
+    "pina": ("🍍", "Piña", 1.80),
+    "platano": ("🍌", "Plátano", 2.10),
+    "sandia": ("🍉", "Sandía", 0.95),
+    "uva": ("🍇", "Uva", 2.90)
 }
 
 
@@ -81,10 +88,10 @@ FRUTAS          = {
 # │ DESCRIPCIÓN: Vacía la entrada estándar de teclado        │
 # └──────────────────────────────────────────────────────────┘
 def limpiar_buffer():
-    try:
+    if ES_WINDOWS:
         while msvcrt.kbhit():
             msvcrt.getch()
-    except ImportError:
+    else:
         while select.select([sys.stdin], [], [], 0)[0]:
             sys.stdin.read(1)
 
@@ -108,7 +115,7 @@ def mostrar_mensaje(texto, tipo="error", segundos=3, lineas_a_borrar=3):
     print(f"\n{icono}  {texto}")
     time.sleep(segundos)
     limpiar_buffer()
-    
+
     secuencia_borrado = f"{SUBIR}{BORRAR}" * lineas_a_borrar
     print(secuencia_borrado, end="", flush=True)
 
@@ -149,10 +156,10 @@ def mostrar_cesta(cesta):
         print("🛒 CESTA ACTUAL:")
         total_provisional = sum(item["total"] for item in cesta.values())
         for item in cesta.values():
-            kg_txt  = f"{item['kg']:.2f}".replace(".00", "").replace(".", ",")
+            kg_txt = f"{item['kg']:.2f}".replace(".00", "").replace(".", ",")
             tot_txt = formato_precio(item['total'])
             print(f"   • {item['icono']} {item['nombre']:<10}: {kg_txt:>5} Kg  ->  {tot_txt:>9}")
-        
+
         tot_prov_txt = formato_precio(total_provisional)
         print("-" * 46)
         print(f"   {'TOTAL PROVISIONAL':<26} ->  {tot_prov_txt:>9}")
@@ -198,7 +205,8 @@ def procesar_comando_global(fruta, cesta):
 # │ SALIDA:      list[str] (claves de frutas coincidentes)   │
 # └──────────────────────────────────────────────────────────┘
 def buscar_fruta(fruta):
-    clave_entrada = fruta.lower().replace("á", "a").replace("é", "e").replace("í", "i").replace("ó", "o").replace("ú", "u")
+    clave_entrada = fruta.lower().replace("á", "a").replace("é", "e").replace("í", "i").replace("ó", "o").replace("ú",
+                                                                                                                  "u")
     coincidencias = []
     if clave_entrada != "":
         for k in FRUTAS:
@@ -224,7 +232,8 @@ def solicitar_kilos(kg_acumulados, nombre_bonito):
         mostrar_mensaje(mensaje_aviso, "warning", segundos=3)
 
     while True:
-        kg_input = input(f"¿Cuántos kilos? (máx. {kg_maximos_permitidos:.2f} kg): ".replace(".", ",")).strip().replace(",", ".")
+        kg_input = input(f"¿Cuántos kilos? (máx. {kg_maximos_permitidos:.2f} kg): ".replace(".", ",")).strip().replace(
+            ",", ".")
 
         # Soporte para omisión de cero inicial (.25, -.25, *.25)
         if kg_input.startswith("."):
@@ -259,7 +268,9 @@ def solicitar_kilos(kg_acumulados, nombre_bonito):
                 elif nuevo_total > 0:
                     return num_kilos
                 else:
-                    mostrar_mensaje(f"No puedes restar {abs(num_kilos):.2f} Kg. Solo hay {kg_acumulados:.2f} Kg en la cesta", "error")
+                    mostrar_mensaje(
+                        f"No puedes restar {abs(num_kilos):.2f} Kg. Solo hay {kg_acumulados:.2f} Kg en la cesta",
+                        "error")
                     continue
 
             # 3. Sumar peso (sin mínimo arbitrario de 0.10)
@@ -284,7 +295,7 @@ def solicitar_kilos(kg_acumulados, nombre_bonito):
 # └──────────────────────────────────────────────────────────────────────────────────────────────────────┘
 def actualizar_cesta(cesta, clave, nombre_bonito, icono, precio, kg):
     total_producto = precio * kg
-    
+
     if clave in cesta:
         cesta[clave]["kg"] += kg
         cesta[clave]["total"] += total_producto
@@ -310,7 +321,7 @@ def actualizar_cesta(cesta, clave, nombre_bonito, icono, precio, kg):
 # │ ENTRADA:     cesta (dict), id_ticket (str)               │
 # └──────────────────────────────────────────────────────────┘
 def mostrar_ticket(cesta, id_ticket):
-    if not cesta: 
+    if not cesta:
         return
 
     limpiar_pantalla()
@@ -329,7 +340,8 @@ def mostrar_ticket(cesta, id_ticket):
 
     for item in cesta.values():
         peso = f"{item['kg']:.2f} Kg".replace(".", ",")
-        print(f"  {item['nombre']:<16} | {peso:>8} | {formato_precio(item['pvp']):>9} | {formato_precio(item['total']):>9}")
+        print(
+            f"  {item['nombre']:<16} | {peso:>8} | {formato_precio(item['pvp']):>9} | {formato_precio(item['total']):>9}")
 
     print(" " + "-" * W_LINEA)
     print(f"  {f'Base Imponible: {formato_precio(base)}':>{W_TEXTO}}")
@@ -351,7 +363,7 @@ def procesar_pago(total_a_pagar):
             f"\n{BOLD}Total: {formato_precio(total_a_pagar)}{RESET} | "
             f"{NARANJA}Entrega (€){RESET} {CYAN}[ENTER = Tarjeta]{RESET} > "
         ).strip()
-        
+
         if entrega_input == "":
             print(f"{CYAN}💳 PAGO CON TARJETA ACEPTADO{RESET}\n")
             return "Tarjeta", total_a_pagar, 0.0
@@ -362,12 +374,14 @@ def procesar_pago(total_a_pagar):
                 cambio = entrega - total_a_pagar
                 print(f"{NARANJA}💶 CAMBIO A DEVOLVER: {formato_precio(cambio)}{RESET}\n")
                 return "Efectivo", entrega, cambio
-            
+
             faltante = total_a_pagar - entrega
-            mostrar_mensaje(f"Cantidad insuficiente. Faltan {formato_precio(faltante)}", "error", segundos=2, lineas_a_borrar=4)
+            mostrar_mensaje(f"Cantidad insuficiente. Faltan {formato_precio(faltante)}", "error", segundos=2,
+                            lineas_a_borrar=4)
 
         except ValueError:
-            mostrar_mensaje("Introduce un número válido o pulsa ENTER para tarjeta", "error", segundos=2, lineas_a_borrar=4)
+            mostrar_mensaje("Introduce un número válido o pulsa ENTER para tarjeta", "error", segundos=2,
+                            lineas_a_borrar=4)
 
 
 # ┌────────────────────────────────────────────────────────────────────────────────────────────────┐
@@ -457,7 +471,7 @@ def crear_pdf(cesta, id_ticket, entrega, cambio, metodo_pago):
 # └──────────────────────────────────────────────────────────┘
 def ejecutar_tpv():
     try:
-        while True: 
+        while True:
             cesta = {}
 
             while True:
@@ -475,7 +489,7 @@ def ejecutar_tpv():
 
                 # 2. Búsqueda y selección de fruta
                 coincidencias = buscar_fruta(fruta)
-                
+
                 if len(coincidencias) == 1:
                     clave = coincidencias[0]
                     icono, nombre_bonito, precio = FRUTAS[clave]
@@ -491,7 +505,7 @@ def ejecutar_tpv():
                 # 3. Solicitar Kilos y actualizar cesta
                 existente = cesta.get(clave)
                 kg_acumulados = existente["kg"] if existente else 0.0
-                
+
                 kg = solicitar_kilos(kg_acumulados, nombre_bonito)
                 actualizar_cesta(cesta, clave, nombre_bonito, icono, precio, kg)
 
@@ -504,7 +518,7 @@ def ejecutar_tpv():
             crear_pdf(cesta, id_ticket, entrega, cambio, metodo_pago)
 
             prompt = f"\n{AMARILLO}{BOLD}[/]{RESET} Nuevo pedido  |  {ROJO}{BOLD}[Ctrl + C]{RESET} Salir > "
-            if input(prompt) != "/": 
+            if input(prompt) != "/":
                 continue
 
     except KeyboardInterrupt:
