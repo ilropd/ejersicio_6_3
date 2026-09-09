@@ -153,3 +153,9 @@ def crear_pdf(cesta, id_ticket, entrega, cambio, metodo_pago):
     c.save()
     print(f"{VERDE}📄 Ticket 'ticket_{id_ticket}.pdf' guardado correctamente{RESET}")
     print(f"🖨️  Ticket enviado a la impresora...")
+
+if __name__ == "__main__":
+    raise RuntimeError(
+        "Este archivo no está diseñado para ejecutarse directamente. "
+        "Ejecuta el programa principal."
+    )

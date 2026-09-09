@@ -168,3 +168,10 @@ def actualizar_cesta(cesta, clave, nombre_bonito, icono, precio, kg):
             "kg": kg,
             "total": total_producto
         }
+
+
+if __name__ == "__main__":
+    raise RuntimeError(
+        "Este archivo no está diseñado para ejecutarse directamente. "
+        "Ejecuta el programa principal."
+    )

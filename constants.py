@@ -64,3 +64,9 @@ FRUTAS = {
     "sandia": ("🍉", "Sandía", 0.95),
     "uva": ("🍇", "Uva", 2.90)
 }
+
+if __name__ == "__main__":
+    raise RuntimeError(
+        "Este archivo no está diseñado para ejecutarse directamente. "
+        "Ejecuta el programa principal."
+    )

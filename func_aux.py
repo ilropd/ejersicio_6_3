@@ -74,3 +74,10 @@ def pedir_confirmacion(mensaje, tipo="pregunta"):
 # └──────────────────────────────────────────────────────────┘
 def formato_precio(numero):
     return f"{numero:.2f} €".replace(".", ",")
+
+
+if __name__ == "__main__":
+    raise RuntimeError(
+        "Este archivo no está diseñado para ejecutarse directamente. "
+        "Ejecuta el programa principal."
+    )
