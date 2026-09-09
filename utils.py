@@ -56,4 +56,27 @@ def pedir_confirmacion(mensaje, tipo="pregunta"):
     respuesta = input(f"\n{icono}  {mensaje} (s/n): ").strip().lower()
     return respuesta in ["s", "si"]
 
+def procesar_comando_global(fruta, cesta):
+    if fruta == "/":
+        if cesta:
+            if pedir_confirmacion("¿Seguro que quieres CANCELAR este pedido y empezar uno nuevo?"):
+                cesta.clear()
+                mostrar_mensaje("Pedido cancelado. Iniciando nueva cesta...", "info", segundos=2)
+                return "CANCELAR"
+            return "CONTINUAR"
+        mostrar_mensaje("La cesta ya está vacía", "warning")
+        return "CONTINUAR"
 
+    elif fruta == "%":
+        if cesta:
+            if pedir_confirmacion("¿Generar el ticket final y cobrar?"):
+                return "TICKET"
+            return "CONTINUAR"
+        mostrar_mensaje("La cesta está vacía. Añade al menos una fruta", "warning")
+        return "CONTINUAR"
+
+    elif fruta == "":
+        mostrar_mensaje("Usa '%' para generar el ticket o '/' para cancelar el pedido", "info")
+        return "CONTINUAR"
+
+    return "NINGUNA"
