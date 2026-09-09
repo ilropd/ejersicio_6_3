@@ -1,0 +1,77 @@
+{
+    "cereza": {
+        "icono": "🍒",
+        "nombre": "Cereza",
+        "precio": 4.5
+    },
+    "datil": {
+        "icono": "🌴",
+        "nombre": "Dátil",
+        "precio": 6.2
+    },
+    "fresa": {
+        "icono": "🍓",
+        "nombre": "Fresa",
+        "precio": 3.8
+    },
+    "kiwi": {
+        "icono": "🥝",
+        "nombre": "Kiwi",
+        "precio": 3.2
+    },
+    "limon": {
+        "icono": "🍋",
+        "nombre": "Limón",
+        "precio": 1.6
+    },
+    "mango": {
+        "icono": "🥭",
+        "nombre": "Mango",
+        "precio": 3.5
+    },
+    "manzana": {
+        "icono": "🍎",
+        "nombre": "Manzana",
+        "precio": 1.95
+    },
+    "melocoton": {
+        "icono": "🍑",
+        "nombre": "Melocotón",
+        "precio": 2.4
+    },
+    "melon": {
+        "icono": "🍈",
+        "nombre": "Melón",
+        "precio": 1.2
+    },
+    "naranja": {
+        "icono": "🍊",
+        "nombre": "Naranja",
+        "precio": 1.5
+    },
+    "pera": {
+        "icono": "🍐",
+        "nombre": "Pera",
+        "precio": 2.15
+    },
+    "pina": {
+        "icono": "🍍",
+        "nombre": "Piña",
+        "precio": 1.8
+    },
+    "platano": {
+        "icono": "🍌",
+        "nombre": "Plátano",
+        "precio": 2.1
+    },
+    "sandia": {
+        "icono": "🍉",
+        "nombre": "Sandía",
+        "precio": 0.95
+    },
+    "uva": {
+        "icono": "🍇",
+        "nombre": "Uva",
+        "precio": 2.9
+    }
+}
