@@ -47,24 +47,6 @@ CABECERA = (
     "================================================================================================\n"
 )
 
-FRUTAS = {
-    "cereza": ("🍒", "Cereza", 4.50),
-    "datil": ("🌴", "Dátil", 6.20),
-    "fresa": ("🍓", "Fresa", 3.80),
-    "kiwi": ("🥝", "Kiwi", 3.20),
-    "limon": ("🍋", "Limón", 1.60),
-    "mango": ("🥭", "Mango", 3.50),
-    "manzana": ("🍎", "Manzana", 1.95),
-    "melocoton": ("🍑", "Melocotón", 2.40),
-    "melon": ("🍈", "Melón", 1.20),
-    "naranja": ("🍊", "Naranja", 1.50),
-    "pera": ("🍐", "Pera", 2.15),
-    "pina": ("🍍", "Piña", 1.80),
-    "platano": ("🍌", "Plátano", 2.10),
-    "sandia": ("🍉", "Sandía", 0.95),
-    "uva": ("🍇", "Uva", 2.90)
-}
-
 if __name__ == "__main__":
     raise RuntimeError(
         "Este archivo no está diseñado para ejecutarse directamente. "

@@ -1,9 +1,19 @@
-from func_aux import *
+import json
 
+from func_aux import *
 
 # ------------------------------------------
 # 2.2 FLUJO DE COMPRA Y CESTA
 # ------------------------------------------
+
+# ┌──────────────────────────────────────────────────────────┐
+# │ FUNCIÓN:     load json data                              │
+# │ DESCRIPCIÓN:                                             │
+# │ ENTRADA:                                                 │
+# └──────────────────────────────────────────────────────────┘
+
+with open("data.json", "r", encoding="utf-8") as f:
+    FRUTAS = json.load(f)
 
 # ┌──────────────────────────────────────────────────────────┐
 # │ FUNCIÓN:     mostrar_cesta()                             │
