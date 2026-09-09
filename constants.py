@@ -1,4 +1,5 @@
 import platform
+
 # ==========================================
 # 1. CONFIGURACIÓN Y CONSTANTES DEL SISTEMA
 # ==========================================

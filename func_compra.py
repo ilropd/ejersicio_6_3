@@ -168,4 +168,3 @@ def actualizar_cesta(cesta, clave, nombre_bonito, icono, precio, kg):
             "kg": kg,
             "total": total_producto
         }
-

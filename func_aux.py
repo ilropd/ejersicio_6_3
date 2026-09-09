@@ -7,6 +7,7 @@ from constants import *
 
 if sys.platform == "win32":
     import msvcrt
+
     ES_WINDOWS = True
 else:
     ES_WINDOWS = False
@@ -73,4 +74,3 @@ def pedir_confirmacion(mensaje, tipo="pregunta"):
 # └──────────────────────────────────────────────────────────┘
 def formato_precio(numero):
     return f"{numero:.2f} €".replace(".", ",")
-
